@@ -22,7 +22,7 @@ Derived from initscripts-macvlan
 
 Copyright (C) 2014 Lars Kellogg-Stedman
 
-Adopted for veth by Oleksandr Natalenko <o.natalenko@lanet.ua>
+Adopted for veth by Oleksandr Natalenko &lt;o.natalenko@lanet.ua&gt;
 
 Copyright (C) 2015 Lanet Network
 

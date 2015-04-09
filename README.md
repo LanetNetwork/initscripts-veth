@@ -19,9 +19,11 @@ License
 =======
 
 Derived from initscripts-macvlan
+
 Copyright (C) 2014 Lars Kellogg-Stedman
 
 Adopted for veth by Oleksandr Natalenko <o.natalenko@lanet.ua>
+
 Copyright (C) 2015 Lanet Network
 
 This program is free software: you can redistribute it and/or modify

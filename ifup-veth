@@ -47,12 +47,27 @@ ip link set \
 	dev ${DEVICE} \
 	address ${VETH_MAC}
 
-brctl addif \
-	${VETH_PARENT} \
-	${DEVICE}-bp
-
-ip link set \
-	dev ${DEVICE}-bp up
+if [ -n "${VETH_PARENT}" ] && [ -x /usr/sbin/brctl ]; then
+	if [ ! -d /sys/class/net/${VETH_PARENT}/bridge ]; then
+		brctl addbr -- \
+			${VETH_PARENT} 2>/dev/null
+		ip link set \
+			dev ${VETH_PARENT} up
+	fi
+	ip addr flush dev ${DEVICE}-bp 2>/dev/null
+	ip link set \
+		dev ${DEVICE}-bp up
+	ethtool_set
+	[ -n "${LINKDELAY}" ] && /bin/sleep ${LINKDELAY}
+	brctl addif -- \
+		${VETH_PARENT} ${DEVICE}-bp
+	for arg in $BRIDGING_OPTS ; do
+		key=${arg%%=*};
+		value=${arg##*=};
+		echo $value > /sys/class/net/${DEVICE}-bp/brport/$key
+	done
+	[ -r /var/run/radvd/radvd.pid ] && kill -HUP $(cat /var/run/radvd/radvd.pid)
+fi
 
 ${OTHERSCRIPT} ${CONFIG}
 

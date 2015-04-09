@@ -40,7 +40,18 @@ fi
 
 ${OTHERSCRIPT} ${CONFIG}
 
-brctl delif ${VETH_PARENT} ${DEVICE}-bp
+if [ -n "${VETH_PARENT}" ] && [ -x /usr/sbin/brctl ]; then
+	ip link set \
+		dev ${DEVICE}-bp down
+	brctl delif -- \
+		${VETH_PARENT} ${DEVICE}-bp
+	[ -r /var/run/radvd/radvd.pid ] && kill -HUP $(cat /var/run/radvd/radvd.pid)
+	if [ -d /sys/class/net/${VETH_PARENT}/brif ] && [ $(ls -1 /sys/class/net/${VETH_PARENT}/brif | wc -l) -eq 0 ]; then
+		ip link set \
+			dev ${VETH_PARENT} down
+		brctl delbr -- ${VETH_PARENT}
+	fi
+fi
 
 ip link del ${DEVICE}
 

@@ -1,0 +1,11 @@
+DEVICE="testveth"
+TYPE="veth"
+DEVICETYPE="Ethernet"
+BOOTPROTO="static"
+IPADDR="1.2.3.4"
+NETMASK="255.255.255.0"
+ONBOOT="yes"
+NM_CONTROLLED="no"
+
+VETH_PARENT="testbridge"
+VETH_MAC="fe:fe:fe:fe:fe:fe"
